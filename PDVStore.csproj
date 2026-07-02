@@ -8,4 +8,18 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Forms\" />
+    <Folder Include="Data\" />
+    <Folder Include="Models\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="Integrations\" />
+    <Folder Include="Repositories\" />
+    <Folder Include="Resourses\Images\" />
+    <Folder Include="Resourses\Icons\" />
+    <Folder Include="Resourses\Reports\" />
+    <Folder Include="ViewModels\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
 </Project>

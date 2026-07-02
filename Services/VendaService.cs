@@ -1,9 +1,6 @@
 ﻿using PDVStore.Data;
-using PDVStore.Models;
 using PDVStore.Integrations;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using PDVStore.Models;
 
 namespace PDVStore.Services
 {

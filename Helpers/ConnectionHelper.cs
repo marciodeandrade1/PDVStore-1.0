@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PDVStore.Helpers
+﻿namespace PDVStore.Helpers
 {
     public class ConnectionHelper
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using BCrypt.Net;
+using System.Security.Cryptography;
 
 namespace PDVStore.Models
 {
@@ -13,12 +13,14 @@ namespace PDVStore.Models
 
         public bool Autenticar(string senha)
         {
-            return BCrypt.Verify(senha, SenhaHash);
+            return BCrypt.Net.BCrypt.Verify(senha, SenhaHash);
         }
 
         public void SetSenha(string senha)
         {
-            SenhaHash = BCrypt.HashPassword(senha);
+            SenhaHash = BCrypt.Net.BCrypt.HashPassword(senha);
+        }
+         
         }
     }
 }

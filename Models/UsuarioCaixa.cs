@@ -21,6 +21,6 @@ namespace PDVStore.Models
             SenhaHash = BCrypt.Net.BCrypt.HashPassword(senha);
         }
          
-        }
+        
     }
 }

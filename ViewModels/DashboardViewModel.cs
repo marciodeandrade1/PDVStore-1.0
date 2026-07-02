@@ -1,4 +1,4 @@
-﻿using PDV_LojaCompleto.Services;
+﻿using PDVStore.Services;
 using PDVStore.Models;
 using System.Collections.ObjectModel;
 

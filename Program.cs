@@ -1,12 +1,19 @@
+using System;
+using System.Windows.Forms;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
+using PDVStore.Data;
 using PDVStore.Forms;
-//using PowerArgs;
+using PDVStore.Integrations;
+using PDVStore.Services;
+using PDVStore.ViewModels;
+using PDVStore.Helpers;
 
 namespace PDVStore
 {
     internal static class Program
     {
-        public static object WinFormsApp { get; private set; }
-
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
@@ -17,22 +24,33 @@ namespace PDVStore
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
 
-            // Program.cs (.NET 8 WinForms com Host)
-         //   var builder = WinFormsApp. .CreateBuilder(Args);
+            // Build a generic host to configure DI and other services and then run the WinForms app.
+            using IHost host = Host.CreateDefaultBuilder()
+                .ConfigureServices((context, services) =>
+                {
+                    // Register EF Core DbContext using centralized connection helper
+                    services.AddDbContext<PDVContext>(options =>
+                        options.UseSqlServer(ConnectionHelper.GetConnectionString()));
 
-            // Connection string centralizada
-            string conn = @"Server=(localdb)\mssqllocaldb;Database=PDV_LojaDB;Trusted_Connection=True;";
+                    // Application services
+                    services.AddTransient<VendaService>();
+                    services.AddTransient<EstoqueService>();
+                    services.AddTransient<RelatorioService>();
+                    services.AddTransient<PagamentoIntegrator>();
+                    services.AddSingleton<DashboardViewModel>();
 
-            //builder.Services.AddDbContext<PdvContext>(opt => opt.UseSqlServer(conn));
-            //builder.Services.AddTransient<VendaService>();
-            //builder.Services.AddTransient<EstoqueService>();
-            //builder.Services.AddTransient<RelatorioService>();
-            //builder.Services.AddTransient<PagamentoIntegrator>();
-            //builder.Services.AddSingleton<DashboardViewModel>();
+                    // Register WinForms so they can receive IServiceProvider in constructors
+                    services.AddTransient<frmLogin>();
+                    services.AddTransient<frmMenuPrincipal>();
+                })
+                .Build();
 
-            //var app = builder.Build();
-           // app.Run<frmLogin>();
-            Application.Run(new frmLogin());
+            // Resolve the initial form from DI and run the app
+            var svc = host.Services;
+            var loginForm = svc.GetRequiredService<frmLogin>();
+            Application.Run(loginForm);
+
+            // Dispose host when application exits
         }
     }
 }

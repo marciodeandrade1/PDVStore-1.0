@@ -8,7 +8,7 @@ using OfficeOpenXml;
 using PDVStore.Data;
 using PDVStore.Models;
 
-namespace PDV_LojaCompleto.Services
+namespace PDVStore.Services
 {
     public class RelatorioService
     {

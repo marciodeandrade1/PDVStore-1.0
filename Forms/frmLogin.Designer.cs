@@ -31,8 +31,8 @@
             btnLogin = new Button();
             lblUsuario = new Label();
             lblSenha = new Label();
-            textBox1 = new TextBox();
-            textBox2 = new TextBox();
+            txtSenha = new TextBox();
+            txtUsuario = new TextBox();
             SuspendLayout();
             // 
             // btnLogin
@@ -43,6 +43,7 @@
             btnLogin.TabIndex = 0;
             btnLogin.Text = "Acessar";
             btnLogin.UseVisualStyleBackColor = true;
+            btnLogin.Click += btnLogin_Click;
             // 
             // lblUsuario
             // 
@@ -62,28 +63,28 @@
             lblSenha.TabIndex = 2;
             lblSenha.Text = "Senha:";
             // 
-            // textBox1
+            // txtSenha
             // 
-            textBox1.Location = new Point(112, 21);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(190, 27);
-            textBox1.TabIndex = 3;
+            txtSenha.Location = new Point(112, 71);
+            txtSenha.Name = "txtSenha";
+            txtSenha.PasswordChar = '*';
+            txtSenha.Size = new Size(190, 27);
+            txtSenha.TabIndex = 3;
             // 
-            // textBox2
+            // txtUsuario
             // 
-            textBox2.Location = new Point(112, 71);
-            textBox2.Name = "textBox2";
-            textBox2.PasswordChar = '*';
-            textBox2.Size = new Size(190, 27);
-            textBox2.TabIndex = 3;
+            txtUsuario.Location = new Point(112, 21);
+            txtUsuario.Name = "txtUsuario";
+            txtUsuario.Size = new Size(190, 27);
+            txtUsuario.TabIndex = 4;
             // 
             // frmLogin
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(354, 190);
-            Controls.Add(textBox2);
-            Controls.Add(textBox1);
+            Controls.Add(txtUsuario);
+            Controls.Add(txtSenha);
             Controls.Add(lblSenha);
             Controls.Add(lblUsuario);
             Controls.Add(btnLogin);
@@ -100,6 +101,7 @@
         private Label lblUsuario;
         private Label lblSenha;
         private TextBox textBox1;
-        private TextBox textBox2;
+        private TextBox txtSenha;
+        private TextBox txtUsuario;
     }
 }

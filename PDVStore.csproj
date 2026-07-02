@@ -9,8 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Data\" />
-    <Folder Include="Helpers\" />
     <Folder Include="Integrations\" />
     <Folder Include="Repositories\" />
     <Folder Include="Resourses\Images\" />

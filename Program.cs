@@ -25,12 +25,24 @@ namespace PDVStore
             ApplicationConfiguration.Initialize();
 
             // Build a generic host to configure DI and other services and then run the WinForms app.
-            using IHost host = Host.CreateDefaultBuilder()
+            using IHost host = CreateHostBuilder(Array.Empty<string>()).Build();
+
+            // Resolve the initial form from DI and run the app
+            var svc = host.Services;
+            var loginForm = svc.GetRequiredService<frmLogin>();
+            Application.Run(loginForm);
+
+            // Dispose host when application exits
+        }
+
+        // Exposed so EF Core tools can build the application's host and resolve services at design time
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
                 .ConfigureServices((context, services) =>
                 {
                     // Register EF Core DbContext using centralized connection helper
                     services.AddDbContext<PDVContext>(options =>
-                        options.UseSqlServer(ConnectionHelper.GetConnectionString()));
+                        options.UseSqlServer(Helpers.ConnectionHelper.GetConnectionString()));
 
                     // Application services
                     services.AddTransient<VendaService>();
@@ -42,15 +54,6 @@ namespace PDVStore
                     // Register WinForms so they can receive IServiceProvider in constructors
                     services.AddTransient<frmLogin>();
                     services.AddTransient<frmMenuPrincipal>();
-                })
-                .Build();
-
-            // Resolve the initial form from DI and run the app
-            var svc = host.Services;
-            var loginForm = svc.GetRequiredService<frmLogin>();
-            Application.Run(loginForm);
-
-            // Dispose host when application exits
-        }
+                });
     }
 }

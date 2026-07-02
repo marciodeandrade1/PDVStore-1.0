@@ -4,6 +4,7 @@ Principais Classes por Pasta (Resumo Completo)
 
 Models
 	Entidades do banco de dados, como Produto, Venda, Cliente, etc.
+	Login e permissões de usuário.
 
 Data
 	DbContext, Migrations, Seeders, etc.

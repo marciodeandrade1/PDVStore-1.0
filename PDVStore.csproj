@@ -13,7 +13,6 @@
     <Folder Include="Resourses\Images\" />
     <Folder Include="Resourses\Icons\" />
     <Folder Include="Resourses\Reports\" />
-    <Folder Include="ViewModels\" />
   </ItemGroup>
 
   <ItemGroup>

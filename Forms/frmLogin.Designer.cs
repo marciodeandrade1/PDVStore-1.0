@@ -33,6 +33,8 @@
             lblSenha = new Label();
             txtSenha = new TextBox();
             txtUsuario = new TextBox();
+            linkLabel1 = new LinkLabel();
+            linkLabel2 = new LinkLabel();
             SuspendLayout();
             // 
             // btnLogin
@@ -78,11 +80,35 @@
             txtUsuario.Size = new Size(190, 27);
             txtUsuario.TabIndex = 4;
             // 
+            // linkLabel1
+            // 
+            linkLabel1.AutoSize = true;
+            linkLabel1.Location = new Point(19, 136);
+            linkLabel1.Name = "linkLabel1";
+            linkLabel1.Size = new Size(76, 20);
+            linkLabel1.TabIndex = 5;
+            linkLabel1.TabStop = true;
+            linkLabel1.Text = "linkLabel1";
+            linkLabel1.LinkClicked += linkLabel1_LinkClicked;
+            // 
+            // linkLabel2
+            // 
+            linkLabel2.AutoSize = true;
+            linkLabel2.Location = new Point(113, 164);
+            linkLabel2.Name = "linkLabel2";
+            linkLabel2.Size = new Size(76, 20);
+            linkLabel2.TabIndex = 6;
+            linkLabel2.TabStop = true;
+            linkLabel2.Text = "linkLabel2";
+            linkLabel2.LinkClicked += linkLabel2_LinkClicked;
+            // 
             // frmLogin
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(354, 190);
+            Controls.Add(linkLabel2);
+            Controls.Add(linkLabel1);
             Controls.Add(txtUsuario);
             Controls.Add(txtSenha);
             Controls.Add(lblSenha);
@@ -103,5 +129,7 @@
         private TextBox textBox1;
         private TextBox txtSenha;
         private TextBox txtUsuario;
+        private LinkLabel linkLabel1;
+        private LinkLabel linkLabel2;
     }
 }

@@ -27,7 +27,7 @@ namespace PDVStore.Forms
             using var scope = _serviceProvider.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<PDVContext>();
 
-            var user = context.Usuarios.FirstOrDefault(u => u.Nome == txtUsuario.Text);
+            var user = context.UsuarioCaixa.FirstOrDefault(u => u.Nome == txtUsuario.Text);
             if (user != null && user.Autenticar(txtSenha.Text))
             {
                 var frmMenu = _serviceProvider.GetService<frmMenuPrincipal>();
@@ -38,6 +38,18 @@ namespace PDVStore.Forms
             {
                 MessageBox.Show("Credenciais inválidas!");
             }
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            frmCadastroUsuario frmCadastro = _serviceProvider.GetService<frmCadastroUsuario>();
+            frmCadastro.Show();
+        }
+
+        private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            frmGerenciarUsuarios frmGerenciar = _serviceProvider.GetService<frmGerenciarUsuarios>();
+            frmGerenciar.Show();
         }
     }
 }

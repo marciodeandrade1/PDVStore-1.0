@@ -1,5 +1,10 @@
-﻿using PDVStore.Data;
-using PDVStore.Integrations;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using PDVStore.Data;
 using PDVStore.Models;
 
 namespace PDVStore.Services
@@ -7,44 +12,46 @@ namespace PDVStore.Services
     public class VendaService
     {
         private readonly PDVContext _context;
-        private readonly PagamentoIntegrator _pagIntegrator;
 
-        public VendaService(PDVContext context, PagamentoIntegrator pagIntegrator)
+        public VendaService(PDVContext context)
         {
             _context = context;
-            _pagIntegrator = pagIntegrator;
         }
 
-        public Produto BuscarProduto(string codigo)
+        public async Task<List<Venda>> GetAllAsync()
         {
-            return _context.Produtos.FirstOrDefault(p => p.CodigoBarras == codigo);
+            return await _context.Vendas
+                .Include(v => v.Items)
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public bool FinalizarVenda(Venda venda, FormaPagamento forma)
+        public async Task<Venda?> GetByIdAsync(int id)
         {
-            using var transaction = _context.Database.BeginTransaction();
-            try
+            return await _context.Vendas
+                .Include(v => v.Items)
+                .FirstOrDefaultAsync(v => v.Id == id);
+        }
+
+        public async Task AddAsync(Venda venda)
+        {
+            await _context.Vendas.AddAsync(venda);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(Venda venda)
+        {
+            _context.Vendas.Update(venda);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var v = await _context.Vendas.FindAsync(id);
+            if (v != null)
             {
-                venda.Total = venda.CalcularTotal();
-                bool pagamentoOk = _pagIntegrator.ProcessarPagamento(venda.Total, forma);
-
-                if (!pagamentoOk) return false;
-
-                foreach (var item in venda.Itens)
-                {
-                    item.Produto.AtualizarEstoque(-item.Quantidade);
-                    _context.Update(item.Produto);
-                }
-
-                _context.Vendas.Add(venda);
-                _context.SaveChanges();
-                transaction.Commit();
-                return true;
-            }
-            catch (Exception)
-            {
-                transaction.Rollback();
-                return false;
+                _context.Vendas.Remove(v);
+                await _context.SaveChangesAsync();
             }
         }
     }

@@ -1,4 +1,10 @@
-﻿using PDVStore.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using PDVStore.Data;
 using PDVStore.Models;
 
 namespace PDVStore.Services
@@ -12,17 +18,36 @@ namespace PDVStore.Services
             _context = context;
         }
 
-        public void AdicionarProduto(Produto produto)
+        public async Task<List<Produto>> GetAllAsync()
         {
-            _context.Produtos.Add(produto);
-            _context.SaveChanges();
+            return await _context.Produtos.AsNoTracking().ToListAsync();
         }
 
-        public List<Produto> GetProdutosBaixoEstoque()
+        public async Task<Produto?> GetByIdAsync(int id)
         {
-            return _context.Produtos.Where(p => p.QuantidadeEstoque < p.EstoqueMinimo).ToList();
+            return await _context.Produtos.FindAsync(id);
         }
 
-        // Outros métodos: Editar, Remover, etc.
+        public async Task AddAsync(Produto produto)
+        {
+            await _context.Produtos.AddAsync(produto);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(Produto produto)
+        {
+            _context.Produtos.Update(produto);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var p = await _context.Produtos.FindAsync(id);
+            if (p != null)
+            {
+                _context.Produtos.Remove(p);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

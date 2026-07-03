@@ -10,9 +10,15 @@
 
   <ItemGroup>
     <Folder Include="Repositories\" />
-    <Folder Include="Resourses\Images\" />
     <Folder Include="Resourses\Icons\" />
     <Folder Include="Resourses\Reports\" />
+  </ItemGroup>
+
+  <!-- Include any files placed under Resources\Images in the output directory -->
+  <ItemGroup>
+    <Content Include="Resources\Images\**\*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +33,22 @@
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.17" />
     <PackageReference Include="PowerArgs" Version="4.0.3" />
+    <PackageReference Include="Serilog" Version="4.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

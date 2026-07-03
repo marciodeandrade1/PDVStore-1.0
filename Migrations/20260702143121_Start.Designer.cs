@@ -11,7 +11,10 @@ using PDVStore.Data;
 
 namespace PDVStore.Migrations
 {
-    [DbContext(typeof(PDVContext))]
+    using System;
+    using Microsoft.EntityFrameworkCore.Infrastructure;
+    using Microsoft.EntityFrameworkCore.Migrations;
+    [DbContext(typeof(PDVStore.Data.PDVContext))]
     [Migration("20260702143121_Start")]
     partial class Start
     {

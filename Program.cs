@@ -2,13 +2,10 @@ using System;
 using System.Windows.Forms;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.EntityFrameworkCore;
 using PDVStore.Data;
 using PDVStore.Forms;
-using PDVStore.Integrations;
-using PDVStore.Services;
-using PDVStore.ViewModels;
-using PDVStore.Helpers;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 
 namespace PDVStore
 {
@@ -40,20 +37,18 @@ namespace PDVStore
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((context, services) =>
                 {
-                    // Register EF Core DbContext using centralized connection helper
+                    // Add DbContext and forms
                     services.AddDbContext<PDVContext>(options =>
-                        options.UseSqlServer(Helpers.ConnectionHelper.GetConnectionString()));
+                        options
+                            .UseSqlServer("YourConnectionStringHere")
+                            // Suppress the PendingModelChangesWarning if any dynamic seed values remain.
+                            .ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning))
+                    );
 
-                    // Application services
-                    services.AddTransient<VendaService>();
-                    services.AddTransient<EstoqueService>();
-                    services.AddTransient<RelatorioService>();
-                    services.AddTransient<PagamentoIntegrator>();
-                    services.AddSingleton<DashboardViewModel>();
-
-                    // Register WinForms so they can receive IServiceProvider in constructors
-                    services.AddTransient<frmLogin>();
-                    services.AddTransient<frmMenuPrincipal>();
+                    services.AddSingleton<frmLogin>();
+                    services.AddTransient<frmCadastroUsuario>();
+                    services.AddTransient<frmGerenciarUsuarios>();
+                    services.AddSingleton<frmMenuPrincipal>();
                 });
     }
 }

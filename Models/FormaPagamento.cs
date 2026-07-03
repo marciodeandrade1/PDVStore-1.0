@@ -4,11 +4,9 @@ using System.Text;
 
 namespace PDVStore.Models
 {
-    public enum FormaPagamento
+    public class FormaPagamento
     {
-        PIX,
-        Credito,
-        Debito,
-        Dinheiro
+        public int Id { get; set; }
+        public string Nome { get; set; }
     }
 }

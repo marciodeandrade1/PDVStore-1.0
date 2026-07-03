@@ -9,35 +9,28 @@ namespace PDVStore.Data
         {
         }
 
+        public DbSet<UsuarioCaixa> UsuarioCaixa { get; set; }
         public DbSet<Produto> Produtos { get; set; }
         public DbSet<Venda> Vendas { get; set; }
-        public DbSet<ItemVenda> ItensVenda { get; set; }
+        public DbSet<ItemVenda> ItemVendas { get; set; }
+        public DbSet<FormaPagamento> FormaPagamentos { get; set; }
+        public DbSet<ItemVenda> ItensVendas { get; set; }
         public DbSet<UsuarioCaixa> Usuarios { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                // Use Helpers.ConnectionHelper para connection string
-                optionsBuilder.UseSqlServer(Helpers.ConnectionHelper.GetConnectionString());
-            }
-        }
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ItemVenda>()
-                .HasOne(i => i.Venda)
-                .WithMany(v => v.Itens)
-                .HasForeignKey(i => i.IdVenda);
+            base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<ItemVenda>()
-                .HasOne(i => i.Produto)
-                .WithMany()
-                .HasForeignKey(i => i.IdProduto);
-
-            modelBuilder.Entity<Produto>()
-                .Property(p => p.EstoqueMinimo)
-                .HasDefaultValue(10);
+            // Seed data: use static values to avoid EF Core pending model changes warning
+            modelBuilder.Entity<UsuarioCaixa>().HasData(new UsuarioCaixa
+            {
+                Id = 1,
+                Nome = "Admin",
+                SenhaHash = "$2a$11$abcdefghijklmnopqrstuv",
+                // Use a fixed DateTime value instead of DateTime.Now to keep the model stable
+                CreatedAt = new DateTime(2026, 7, 3, 0, 0, 0, DateTimeKind.Utc)
+            });
         }
     }
 }

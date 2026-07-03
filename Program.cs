@@ -6,6 +6,7 @@ using PDVStore.Data;
 using PDVStore.Forms;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace PDVStore
 {
@@ -38,9 +39,11 @@ namespace PDVStore
                 .ConfigureServices((context, services) =>
                 {
                     // Add DbContext and forms
+                    // Use the same ConnectionHelper used by the design-time factory to keep
+                    // runtime and design-time connection strings consistent.
                     services.AddDbContext<PDVContext>(options =>
                         options
-                            .UseSqlServer("YourConnectionStringHere")
+                            .UseSqlServer(Helpers.ConnectionHelper.GetConnectionString())
                             // Suppress the PendingModelChangesWarning if any dynamic seed values remain.
                             .ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning))
                     );

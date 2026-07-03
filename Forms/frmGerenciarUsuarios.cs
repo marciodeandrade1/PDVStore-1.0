@@ -27,20 +27,40 @@ namespace PDVStore.Forms
 
         private void CarregarUsuarios()
         {
-            var usuarios = _context.UsuarioCaixa
-                .Where(u => u.GetAtivo())
-                .Select(u => new
-                {
-                    u.Id,
-                    u.Nome,
-                    Status = u.Ativo ? "Ativo" : "Inativo",
-                    Foto = !string.IsNullOrEmpty(u.FotoPath) && File.Exists(u.FotoPath)
-                           ? Image.FromFile(u.FotoPath)
-                           : Properties.Resources.user_default
-                })
+            // Fetch only database fields (no methods or file I/O) so EF Core can translate the query
+            var usuariosDto = _context.UsuarioCaixa
+                .Select(u => new { u.Id, u.Nome, u.Ativo, u.FotoPath })
                 .ToList();
 
+            // Perform file I/O and image creation on the client side
+            var usuarios = usuariosDto.Select(u => new
+            {
+                u.Id,
+                u.Nome,
+                Status = u.Ativo ? "Ativo" : "Inativo",
+                Foto = !string.IsNullOrEmpty(u.FotoPath) && File.Exists(u.FotoPath)
+                       ? LoadImageSafely(u.FotoPath)
+                       : Properties.Resources.user_default
+            })
+            .ToList();
+
             dgvUsuarios.DataSource = usuarios;
+        }
+
+        // Helper to load an Image without locking the file by cloning the image into memory
+        private Image LoadImageSafely(string path)
+        {
+            try
+            {
+                using var fs = File.OpenRead(path);
+                using var temp = Image.FromStream(fs);
+                return new Bitmap(temp);
+            }
+            catch
+            {
+                // If loading fails, fall back to default resource
+                return Properties.Resources.user_default;
+            }
         }
 
         private void ConfigurarGrid()

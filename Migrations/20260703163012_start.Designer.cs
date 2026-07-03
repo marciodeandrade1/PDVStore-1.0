@@ -11,12 +11,9 @@ using PDVStore.Data;
 
 namespace PDVStore.Migrations
 {
-    using System;
-    using Microsoft.EntityFrameworkCore.Infrastructure;
-    using Microsoft.EntityFrameworkCore.Migrations;
-    [DbContext(typeof(PDVStore.Data.PDVContext))]
-    [Migration("20260702143121_Start")]
-    partial class Start
+    [DbContext(typeof(PDVContext))]
+    [Migration("20260703163012_start")]
+    partial class start
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,6 +25,23 @@ namespace PDVStore.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("PDVStore.Models.FormaPagamento", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FormaPagamentos");
+                });
+
             modelBuilder.Entity("PDVStore.Models.ItemVenda", b =>
                 {
                     b.Property<int>("Id")
@@ -36,25 +50,23 @@ namespace PDVStore.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("IdProduto")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdVenda")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("PrecoUnitario")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Produto")
+                        .HasColumnType("int");
 
                     b.Property<int>("Quantidade")
                         .HasColumnType("int");
 
+                    b.Property<int>("VendaId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("IdProduto");
+                    b.HasIndex("VendaId");
 
-                    b.HasIndex("IdVenda");
-
-                    b.ToTable("ItensVenda");
+                    b.ToTable("ItemVenda");
                 });
 
             modelBuilder.Entity("PDVStore.Models.Produto", b =>
@@ -65,18 +77,8 @@ namespace PDVStore.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CodigoBarras")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("EstoqueMinimo")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(10);
-
-                    b.Property<string>("Fornecedor")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Estoque")
+                        .HasColumnType("int");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -84,9 +86,6 @@ namespace PDVStore.Migrations
 
                     b.Property<decimal>("Preco")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("QuantidadeEstoque")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -101,9 +100,15 @@ namespace PDVStore.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Permissao")
+                        .HasColumnType("int");
 
                     b.Property<string>("SenhaHash")
                         .IsRequired()
@@ -111,7 +116,17 @@ namespace PDVStore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Usuarios");
+                    b.ToTable("UsuarioCaixa");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2026, 7, 3, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Nome = "Admin",
+                            Permissao = 1,
+                            SenhaHash = "$2a$11$abcdefghijklmnopqrstuv"
+                        });
                 });
 
             modelBuilder.Entity("PDVStore.Models.Venda", b =>
@@ -125,7 +140,7 @@ namespace PDVStore.Migrations
                     b.Property<DateTime>("Data")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("FormaPagamento")
+                    b.Property<int>("FormaPagamentoId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Total")
@@ -138,26 +153,16 @@ namespace PDVStore.Migrations
 
             modelBuilder.Entity("PDVStore.Models.ItemVenda", b =>
                 {
-                    b.HasOne("PDVStore.Models.Produto", "Produto")
-                        .WithMany()
-                        .HasForeignKey("IdProduto")
+                    b.HasOne("PDVStore.Models.Venda", null)
+                        .WithMany("Items")
+                        .HasForeignKey("VendaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("PDVStore.Models.Venda", "Venda")
-                        .WithMany("Itens")
-                        .HasForeignKey("IdVenda")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Produto");
-
-                    b.Navigation("Venda");
                 });
 
             modelBuilder.Entity("PDVStore.Models.Venda", b =>
                 {
-                    b.Navigation("Itens");
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

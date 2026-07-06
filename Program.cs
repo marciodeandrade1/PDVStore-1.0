@@ -4,6 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PDVStore.Data;
 using PDVStore.Forms;
+using PDVStore.Services;
+using PDVStore.Integrations;
+using PDVLoja.Services;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -52,6 +55,10 @@ namespace PDVStore
                     services.AddTransient<frmCadastroUsuario>();
                     services.AddTransient<frmGerenciarUsuarios>();
                     services.AddSingleton<frmMenuPrincipal>();
+                    services.AddTransient<EstoqueService>();
+                    services.AddTransient<PagamentoIntegrator>();
+                    services.AddTransient<VendaService>();
+                    services.AddTransient<frmPDV>();
                 });
     }
 }

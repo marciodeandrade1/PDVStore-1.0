@@ -1,6 +1,7 @@
 ﻿using iText.StyledXmlParser.Jsoup.Nodes;
 using Microsoft.Extensions.DependencyInjection;
 using PDVStore.Data;
+using PDVStore.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -30,6 +31,9 @@ namespace PDVStore.Forms
             var user = context.UsuarioCaixa.FirstOrDefault(u => u.Nome == txtUsuario.Text);
             if (user != null && user.Autenticar(txtSenha.Text))
             {
+                // Store authenticated user in session so other forms can access the Id
+                Session.CurrentUser = user;
+
                 var frmMenu = _serviceProvider.GetService<frmMenuPrincipal>();
                 frmMenu.Show();
                 this.Hide();

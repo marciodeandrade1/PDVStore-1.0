@@ -2,12 +2,12 @@
 
 namespace PDVStore.Models
 {
-    public class ItemVenda
+    public class ItemVenda : IHasId
     {
         public int Id { get; set; }
-        public int VendaId { get; set; }
-        public int Produto { get; set; }
+        public int ProdutoId { get; set; }
         public int Quantidade { get; set; }
-        public decimal PrecoUnitario { get; set; }
+        public int PrecoUnitario { get; internal set; }
+        public object VendaId { get; internal set; }
     }
 }

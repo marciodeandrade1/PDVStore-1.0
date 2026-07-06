@@ -68,7 +68,7 @@
             // lblConfirma
             // 
             lblConfirma.AutoSize = true;
-            lblConfirma.Location = new Point(204, 116);
+            lblConfirma.Location = new Point(200, 116);
             lblConfirma.Name = "lblConfirma";
             lblConfirma.Size = new Size(78, 20);
             lblConfirma.TabIndex = 5;
@@ -102,7 +102,7 @@
             // 
             // btnSalvar
             // 
-            btnSalvar.Location = new Point(288, 164);
+            btnSalvar.Location = new Point(323, 200);
             btnSalvar.Name = "btnSalvar";
             btnSalvar.Size = new Size(147, 29);
             btnSalvar.TabIndex = 9;
@@ -122,7 +122,7 @@
             // 
             // btnCancelar
             // 
-            btnCancelar.Location = new Point(288, 199);
+            btnCancelar.Location = new Point(323, 235);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(147, 29);
             btnCancelar.TabIndex = 11;

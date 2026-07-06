@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace PDVStore.Models
 {
-    public class FormaPagamento
+    public class FormaPagamento : IHasId
     {
         public int Id { get; set; }
         public string Nome { get; set; }

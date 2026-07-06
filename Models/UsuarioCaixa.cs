@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 
 namespace PDVStore.Models
 {
-    public class UsuarioCaixa
+    public class UsuarioCaixa : IHasId
     {
         internal string? FotoPath;
         internal bool Ativo;

@@ -25,9 +25,9 @@ namespace PDVStore.Services
         public List<ItemRelatorio> GerarRelatorioItensMaisVendidos(DateTime inicio, DateTime fim, int topN = 10)
         {
             var query = (from iv in _context.ItensVendas
-                         join p in _context.Produtos on iv.Produto equals p.Id
+                         join p in _context.Produtos on iv.ProdutoId equals p.Id
                          join v in _context.Vendas on iv.VendaId equals v.Id
-                         where v != null && v.Data >= inicio && v.Data <= fim
+                         where v != null && v.CreatedAt >= inicio && v.CreatedAt <= fim
                          group new { iv, p } by p into g
                          select new ItemRelatorio
                          {

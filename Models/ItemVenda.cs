@@ -5,9 +5,13 @@ namespace PDVStore.Models
     public class ItemVenda : IHasId
     {
         public int Id { get; set; }
+        public int VendaId { get; set; }
         public int ProdutoId { get; set; }
         public int Quantidade { get; set; }
-        public int PrecoUnitario { get; internal set; }
-        public object VendaId { get; internal set; }
+        public decimal PrecoUnitario { get; set; }
+        public decimal Subtotal => Quantidade * PrecoUnitario;
+
+        public Produto? Produto { get; set; }
+        public Venda? Venda { get; set; }
     }
 }

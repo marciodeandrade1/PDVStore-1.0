@@ -49,5 +49,35 @@ namespace PDVStore.Services
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<bool> BaixarEstoqueAsync(int produtoId, int quantidade)
+        {
+            if (quantidade <= 0)
+                throw new ArgumentException("Quantidade deve ser maior que zero.", nameof(quantidade));
+
+            var produto = await _context.Produtos.FindAsync(produtoId);
+            if (produto == null)
+                return false;
+
+            if (produto.Estoque < quantidade)
+                return false; // insufficient stock
+
+            produto.Estoque -= quantidade;
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task AdicionarEstoqueAsync(int produtoId, int quantidade)
+        {
+            if (quantidade <= 0)
+                throw new ArgumentException("Quantidade deve ser maior que zero.", nameof(quantidade));
+
+            var produto = await _context.Produtos.FindAsync(produtoId);
+            if (produto == null)
+                throw new KeyNotFoundException("Produto não encontrado.");
+
+            produto.Estoque += quantidade;
+            await _context.SaveChangesAsync();
+        }
     }
 }

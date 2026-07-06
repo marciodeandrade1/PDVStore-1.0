@@ -13,6 +13,11 @@ namespace PDVStore.Integrations
             return true; // Sempre aprova em mock
         }
 
+        internal async Task<bool> ProcessarPagamentoAsync(Venda venda)
+        {
+            throw new NotImplementedException();
+        }
+
         private void IntegrarContaBancaria(decimal valor)
         {
             // Mock depósito em conta bancária

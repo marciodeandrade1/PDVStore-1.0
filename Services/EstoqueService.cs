@@ -67,17 +67,18 @@ namespace PDVStore.Services
             return true;
         }
 
-        public async Task AdicionarEstoqueAsync(int produtoId, int quantidade)
+        public async Task<bool> AdicionarEstoqueAsync(int produtoId, int quantidade)
         {
             if (quantidade <= 0)
                 throw new ArgumentException("Quantidade deve ser maior que zero.", nameof(quantidade));
 
             var produto = await _context.Produtos.FindAsync(produtoId);
             if (produto == null)
-                throw new KeyNotFoundException("Produto não encontrado.");
+                return false;
 
             produto.Estoque += quantidade;
             await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

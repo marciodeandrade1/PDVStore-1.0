@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PDVStore.Models
+﻿namespace PDVStore.Models
 {
     public class Produto : IHasId
     {

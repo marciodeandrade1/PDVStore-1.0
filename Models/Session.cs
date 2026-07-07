@@ -1,5 +1,3 @@
-using System;
-
 namespace PDVStore.Models
 {
     // Simple global session holder for the currently authenticated user.

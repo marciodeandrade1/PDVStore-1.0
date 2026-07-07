@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace PDVStore.Models
+﻿namespace PDVStore.Models
 {
     public class Venda : IHasId
     {

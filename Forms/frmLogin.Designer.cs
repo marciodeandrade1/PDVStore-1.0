@@ -35,6 +35,7 @@
             txtUsuario = new TextBox();
             linkLabel1 = new LinkLabel();
             linkLabel2 = new LinkLabel();
+            linkLabel3 = new LinkLabel();
             SuspendLayout();
             // 
             // btnLogin
@@ -102,11 +103,23 @@
             linkLabel2.Text = "linkLabel2";
             linkLabel2.LinkClicked += linkLabel2_LinkClicked;
             // 
+            // linkLabel3
+            // 
+            linkLabel3.AutoSize = true;
+            linkLabel3.Location = new Point(244, 189);
+            linkLabel3.Name = "linkLabel3";
+            linkLabel3.Size = new Size(76, 20);
+            linkLabel3.TabIndex = 7;
+            linkLabel3.TabStop = true;
+            linkLabel3.Text = "linkLabel3";
+            linkLabel3.LinkClicked += linkLabel3_LinkClicked;
+            // 
             // frmLogin
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(354, 190);
+            ClientSize = new Size(398, 252);
+            Controls.Add(linkLabel3);
             Controls.Add(linkLabel2);
             Controls.Add(linkLabel1);
             Controls.Add(txtUsuario);
@@ -131,5 +144,6 @@
         private TextBox txtUsuario;
         private LinkLabel linkLabel1;
         private LinkLabel linkLabel2;
+        private LinkLabel linkLabel3;
     }
 }

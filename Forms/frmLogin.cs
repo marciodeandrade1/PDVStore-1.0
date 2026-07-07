@@ -55,5 +55,11 @@ namespace PDVStore.Forms
             frmGerenciarUsuarios frmGerenciar = _serviceProvider.GetService<frmGerenciarUsuarios>();
             frmGerenciar.Show();
         }
+
+        private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            frmGerenciarProdutos frmGerenciarProdutos = _serviceProvider.GetService<frmGerenciarProdutos>();
+            frmGerenciarProdutos.Show();
+        }
     }
 }

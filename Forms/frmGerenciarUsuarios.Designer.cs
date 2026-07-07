@@ -108,7 +108,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(887, 403);
+            ClientSize = new Size(887, 428);
             Controls.Add(txtBusca);
             Controls.Add(lblPesquisar);
             Controls.Add(btnAtualizar);

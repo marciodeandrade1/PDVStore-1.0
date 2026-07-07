@@ -80,5 +80,23 @@ namespace PDVStore.Services
             await _context.SaveChangesAsync();
             return true;
         }
+        public async Task<bool> RegistrarMovimentacaoAsync(MovimentacaoEstoque movimentacao)
+        {
+            object value = _context.MovimentacoesEstoque.Add(movimentacao);
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<List<MovimentacaoEstoque>> ObterHistoricoMovimentacoesAsync(DateTime? inicio = null, DateTime? fim = null)
+        {
+            var query = _context.MovimentacoesEstoque
+                .Include(m => m.Produto)
+                .Include(m => m.Usuario)
+                .AsQueryable();
+
+            if (inicio.HasValue) query = query.Where(m => m.DataMovimentacao >= inicio);
+            if (fim.HasValue) query = query.Where(m => m.DataMovimentacao <= fim);
+
+            return await query.OrderByDescending(m => m.DataMovimentacao).ToListAsync();
+        }
     }
 }

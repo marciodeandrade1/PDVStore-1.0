@@ -16,8 +16,8 @@ namespace PDVStore.Data
         public DbSet<FormaPagamento> FormaPagamentos { get; set; }
         public DbSet<ItemVenda> ItensVendas { get; set; }
         public DbSet<UsuarioCaixa> Usuarios { get; set; }
+        public DbSet<MovimentacaoEstoque> MovimentacoesEstoque { get; set; }
 
-        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

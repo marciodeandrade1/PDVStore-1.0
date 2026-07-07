@@ -61,5 +61,11 @@ namespace PDVStore.Forms
             frmGerenciarProdutos frmGerenciarProdutos = _serviceProvider.GetService<frmGerenciarProdutos>();
             frmGerenciarProdutos.Show();
         }
+
+        private void linkLabel4_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            frmEstoque frmEstoque = _serviceProvider.GetService<frmEstoque>();
+            frmEstoque.Show();
+        }
     }
 }

@@ -25,7 +25,32 @@ namespace PDVStore.Forms
 
         private void CarregarProdutos()
         {
-            throw new NotImplementedException();
+            try
+            {
+                // var produtos = await _estoqueService.ListarProdutosAsync();
+                // dgvProdutos.DataSource = produtos.ToList();
+
+                // Simulação temporária
+                dgvProdutos.DataSource = new List<Produto>
+                {
+                    new Produto { Id = 1, CodigoBarras = "789123456", Nome = "Arroz Tipo 1 - 5kg", Preco = 24.90m, EstoqueAtual = 45, Categoria = "Alimentos Básicos" },
+                    new Produto { Id = 2, CodigoBarras = "789654321", Nome = "Feijão Carioca 1kg", Preco = 8.50m, EstoqueAtual = 120, Categoria = "Alimentos Básicos" },
+                    new Produto { Id = 3, CodigoBarras = "789987654", Nome = "Óleo de Soja 900ml", Preco = 7.99m, EstoqueAtual = 80, Categoria = "Óleos" }
+                };
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao carregar estoque: " + ex.Message);
+            }
+        }
+
+        private void DgvProdutos_SelectionChanged(object? sender, EventArgs e)
+        {
+            if (dgvProdutos.CurrentRow?.DataBoundItem is Produto produto)
+            {
+                _produtoSelecionado = produto;
+                lblProdutoSelecionado.Text = $"Produto Selecionado: {produto.Nome} (Estoque: {produto.EstoqueAtual})";
+            }
         }
 
         private void ConfigurarFormulario()

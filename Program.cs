@@ -59,6 +59,7 @@ namespace PDVStore
                     services.AddTransient<PagamentoIntegrator>();
                     services.AddTransient<VendaService>();
                     services.AddTransient<frmGerenciarProdutos>();
+                    services.AddTransient<frmEstoque>();
                     services.AddTransient<frmPDV>();
                 });
     }

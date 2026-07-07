@@ -23,7 +23,7 @@ namespace PDVStore.Properties {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
-        internal static Image user_default;
+        
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
@@ -57,6 +57,16 @@ namespace PDVStore.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap user_default {
+            get {
+                object obj = ResourceManager.GetObject("user_default", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

@@ -39,40 +39,39 @@
             btnEscolherFoto = new Button();
             btnCancelar = new Button();
             openFileDialog1 = new OpenFileDialog();
+            chkAdministrador = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)picFoto).BeginInit();
             SuspendLayout();
             // 
             // txtNome
             // 
-            txtNome.Location = new Point(252, 25);
-            txtNome.Margin = new Padding(3, 2, 3, 2);
+            txtNome.Location = new Point(288, 33);
             txtNome.Name = "txtNome";
-            txtNome.Size = new Size(261, 23);
+            txtNome.Size = new Size(298, 27);
             txtNome.TabIndex = 1;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(175, 52);
+            label1.Location = new Point(200, 69);
             label1.Name = "label1";
-            label1.Size = new Size(42, 15);
+            label1.Size = new Size(52, 20);
             label1.TabIndex = 2;
             label1.Text = "Senha:";
             // 
             // txtSenha
             // 
-            txtSenha.Location = new Point(252, 52);
-            txtSenha.Margin = new Padding(3, 2, 3, 2);
+            txtSenha.Location = new Point(288, 69);
             txtSenha.Name = "txtSenha";
-            txtSenha.Size = new Size(160, 23);
+            txtSenha.Size = new Size(182, 27);
             txtSenha.TabIndex = 3;
             // 
             // lblConfirma
             // 
             lblConfirma.AutoSize = true;
-            lblConfirma.Location = new Point(175, 87);
+            lblConfirma.Location = new Point(200, 116);
             lblConfirma.Name = "lblConfirma";
-            lblConfirma.Size = new Size(64, 15);
+            lblConfirma.Size = new Size(78, 20);
             lblConfirma.TabIndex = 5;
             lblConfirma.Text = "Confirmar:";
             // 
@@ -80,10 +79,9 @@
             // 
             picFoto.BorderStyle = BorderStyle.Fixed3D;
             picFoto.Image = Properties.Resources.user_default;
-            picFoto.Location = new Point(19, 22);
-            picFoto.Margin = new Padding(3, 2, 3, 2);
+            picFoto.Location = new Point(22, 29);
             picFoto.Name = "picFoto";
-            picFoto.Size = new Size(129, 109);
+            picFoto.Size = new Size(147, 144);
             picFoto.SizeMode = PictureBoxSizeMode.StretchImage;
             picFoto.TabIndex = 6;
             picFoto.TabStop = false;
@@ -91,26 +89,24 @@
             // lblNome
             // 
             lblNome.AutoSize = true;
-            lblNome.Location = new Point(175, 27);
+            lblNome.Location = new Point(200, 36);
             lblNome.Name = "lblNome";
-            lblNome.Size = new Size(43, 15);
+            lblNome.Size = new Size(53, 20);
             lblNome.TabIndex = 7;
             lblNome.Text = "Nome:";
             // 
             // txtConfirmaSenha
             // 
-            txtConfirmaSenha.Location = new Point(252, 85);
-            txtConfirmaSenha.Margin = new Padding(3, 2, 3, 2);
+            txtConfirmaSenha.Location = new Point(288, 113);
             txtConfirmaSenha.Name = "txtConfirmaSenha";
-            txtConfirmaSenha.Size = new Size(160, 23);
+            txtConfirmaSenha.Size = new Size(182, 27);
             txtConfirmaSenha.TabIndex = 8;
             // 
             // btnSalvar
             // 
-            btnSalvar.Location = new Point(252, 135);
-            btnSalvar.Margin = new Padding(3, 2, 3, 2);
+            btnSalvar.Location = new Point(288, 180);
             btnSalvar.Name = "btnSalvar";
-            btnSalvar.Size = new Size(129, 22);
+            btnSalvar.Size = new Size(147, 29);
             btnSalvar.TabIndex = 9;
             btnSalvar.Text = "Cadastrar usuário";
             btnSalvar.UseVisualStyleBackColor = true;
@@ -118,10 +114,9 @@
             // 
             // btnEscolherFoto
             // 
-            btnEscolherFoto.Location = new Point(19, 135);
-            btnEscolherFoto.Margin = new Padding(3, 2, 3, 2);
+            btnEscolherFoto.Location = new Point(22, 180);
             btnEscolherFoto.Name = "btnEscolherFoto";
-            btnEscolherFoto.Size = new Size(129, 22);
+            btnEscolherFoto.Size = new Size(147, 29);
             btnEscolherFoto.TabIndex = 10;
             btnEscolherFoto.Text = "Escolher foto";
             btnEscolherFoto.UseVisualStyleBackColor = true;
@@ -129,10 +124,9 @@
             // 
             // btnCancelar
             // 
-            btnCancelar.Location = new Point(252, 161);
-            btnCancelar.Margin = new Padding(3, 2, 3, 2);
+            btnCancelar.Location = new Point(288, 215);
             btnCancelar.Name = "btnCancelar";
-            btnCancelar.Size = new Size(129, 22);
+            btnCancelar.Size = new Size(147, 29);
             btnCancelar.TabIndex = 11;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = true;
@@ -142,11 +136,22 @@
             // 
             openFileDialog1.FileName = "openFileDialog1";
             // 
+            // chkAdministrador
+            // 
+            chkAdministrador.AutoSize = true;
+            chkAdministrador.Location = new Point(288, 150);
+            chkAdministrador.Name = "chkAdministrador";
+            chkAdministrador.Size = new Size(126, 24);
+            chkAdministrador.TabIndex = 12;
+            chkAdministrador.Text = "Administrador";
+            chkAdministrador.UseVisualStyleBackColor = true;
+            // 
             // frmCadastroUsuario
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(534, 207);
+            ClientSize = new Size(610, 276);
+            Controls.Add(chkAdministrador);
             Controls.Add(btnCancelar);
             Controls.Add(btnEscolherFoto);
             Controls.Add(btnSalvar);
@@ -157,7 +162,6 @@
             Controls.Add(txtSenha);
             Controls.Add(label1);
             Controls.Add(txtNome);
-            Margin = new Padding(3, 2, 3, 2);
             Name = "frmCadastroUsuario";
             Text = "frmCadastroUsuario";
             ((System.ComponentModel.ISupportInitialize)picFoto).EndInit();
@@ -178,5 +182,6 @@
         private Button btnEscolherFoto;
         private Button btnCancelar;
         private OpenFileDialog openFileDialog1;
+        private CheckBox chkAdministrador;
     }
 }

@@ -13,7 +13,7 @@ namespace PDVStore.Forms
         private readonly PDVContext _context;
         private readonly ErrorProvider _errorProvider = new();
         private string? _caminhoFotoSelecionada;
-        private UsuarioCaixa? _usuarioEmEdicao;   // Para modo edição
+        private UsuarioCaixa? _usuarioEmEdicao;
 
         // Construtor para Novo Usuário
         public frmCadastroUsuario(PDVContext context)
@@ -22,6 +22,7 @@ namespace PDVStore.Forms
             _context = context;
             this.Text = "Cadastrar Novo Usuário";
             CarregarImagemPadrao();
+            chkAdministrador.Checked = false; // Padrão: Operador
         }
 
         // Construtor para Edição
@@ -39,17 +40,12 @@ namespace PDVStore.Forms
             try
             {
                 var appDir = AppDomain.CurrentDomain.BaseDirectory;
-                var userImagePath = Path.Combine(appDir, "Resources", "Images", "user_default.png");
+                var imagePath = Path.Combine(appDir, "Resources", "Images", "user_default.png");
 
-                if (File.Exists(userImagePath))
-                {
-                    picFoto.Image = Image.FromFile(userImagePath);
-                }
+                if (File.Exists(imagePath))
+                    picFoto.Image = Image.FromFile(imagePath);
                 else
-                {
-                    // Fallback para recurso embutido
                     picFoto.Image = Properties.Resources.user_default;
-                }
             }
             catch
             {
@@ -62,15 +58,34 @@ namespace PDVStore.Forms
             if (_usuarioEmEdicao == null) return;
 
             txtNome.Text = _usuarioEmEdicao.Nome;
-            txtNome.Enabled = false; // Nome não deve ser alterado
+            txtNome.Enabled = false; // Não permitir alterar nome
 
-            if (!string.IsNullOrEmpty(_usuarioEmEdicao.GetFotoPath()) && File.Exists(_usuarioEmEdicao.GetFotoPath()))
+            chkAdministrador.Checked = _usuarioEmEdicao.Permissao == TipoPermissao.Administrador;
+
+            if (!string.IsNullOrEmpty(_usuarioEmEdicao.FotoPath) && File.Exists(_usuarioEmEdicao.FotoPath))
             {
-                picFoto.Image = Image.FromFile(_usuarioEmEdicao.GetFotoPath());
+                picFoto.Image = Image.FromFile(_usuarioEmEdicao.FotoPath);
             }
         }
 
-       
+        private void btnEscolherFoto_Click(object sender, EventArgs e)
+        {
+            using var ofd = new OpenFileDialog
+            {
+                Filter = "Imagens|*.jpg;*.jpeg;*.png;*.bmp",
+                Title = "Selecionar Foto do Usuário"
+            };
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                _caminhoFotoSelecionada = ofd.FileName;
+                picFoto.Image = Image.FromFile(_caminhoFotoSelecionada);
+            }
+        }
+
+        // Designer may reference btnEscolherFoto_Click_1; provide a small adapter.
+        private void btnEscolherFoto_Click_1(object sender, EventArgs e) => btnEscolherFoto_Click(sender, e);
+
         private async void btnSalvar_Click(object sender, EventArgs e)
         {
             _errorProvider.Clear();
@@ -97,9 +112,9 @@ namespace PDVStore.Forms
 
                 UsuarioCaixa usuario;
 
-                if (_usuarioEmEdicao == null) // CADASTRO NOVO
+                if (_usuarioEmEdicao == null) // NOVO USUÁRIO
                 {
-                    if (_context.UsuarioCaixa.Any(u => u.Nome == txtNome.Text.Trim()))
+                    if (_context.Usuarios.Any(u => u.Nome == txtNome.Text.Trim()))
                     {
                         _errorProvider.SetError(txtNome, "Este nome de usuário já está em uso!");
                         return;
@@ -107,13 +122,20 @@ namespace PDVStore.Forms
 
                     usuario = new UsuarioCaixa
                     {
-                        Nome = txtNome.Text.Trim()
+                        Nome = txtNome.Text.Trim(),
+                        Permissao = chkAdministrador.Checked ? TipoPermissao.Administrador : TipoPermissao.Operador
                     };
-                    _context.UsuarioCaixa.Add(usuario);
+
+                    _context.Usuarios.Add(usuario);
                 }
                 else // EDIÇÃO
                 {
                     usuario = _usuarioEmEdicao;
+                    // Atualiza permissão apenas se o usuário logado for Admin
+                    if (PDVStore.Models.Session.CurrentUser?.EhAdmin() == true)
+                    {
+                        usuario.Permissao = chkAdministrador.Checked ? TipoPermissao.Administrador : TipoPermissao.Operador;
+                    }
                 }
 
                 usuario.SetSenha(txtSenha.Text);
@@ -122,8 +144,8 @@ namespace PDVStore.Forms
                 await _context.SaveChangesAsync();
 
                 Log.Information(_usuarioEmEdicao == null ?
-                    "Novo usuário cadastrado: {Nome}" :
-                    "Usuário atualizado: {Nome}", usuario.Nome);
+                    "Novo usuário cadastrado: {Nome} | Permissão: {Permissao}" :
+                    "Usuário atualizado: {Nome}", usuario.Nome, usuario.Permissao);
 
                 MessageBox.Show("Usuário salvo com sucesso!", "Sucesso",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -164,21 +186,6 @@ namespace PDVStore.Forms
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             this.Close();
-        }
-
-        private void btnEscolherFoto_Click_1(object sender, EventArgs e)
-        {
-            using var ofd = new OpenFileDialog
-            {
-                Filter = "Imagens|*.jpg;*.jpeg;*.png;*.bmp",
-                Title = "Selecionar Foto do Usuário"
-            };
-
-            if (ofd.ShowDialog() == DialogResult.OK)
-            {
-                _caminhoFotoSelecionada = ofd.FileName;
-                picFoto.Image = Image.FromFile(_caminhoFotoSelecionada);
-            }
         }
     }
 }

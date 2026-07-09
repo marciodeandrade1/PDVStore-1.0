@@ -79,7 +79,53 @@ namespace PDVStore.Forms
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 _caminhoFotoSelecionada = ofd.FileName;
-                picFoto.Image = Image.FromFile(_caminhoFotoSelecionada);
+                try
+                {
+                    // Dispose previous image to free memory and avoid file locks
+                    if (picFoto.Image != null)
+                    {
+                        var old = picFoto.Image;
+                        picFoto.Image = null;
+                        old.Dispose();
+                    }
+
+                    // Load image from stream (validates image data) and clone to avoid locking file
+                    using var fs = new FileStream(_caminhoFotoSelecionada, FileMode.Open, FileAccess.Read, FileShare.Read);
+                    using var img = Image.FromStream(fs, useEmbeddedColorManagement: false, validateImageData: true);
+
+                    // If image is very large, downscale to limit memory usage
+                    const int MaxDimension = 800;
+                    int width = img.Width;
+                    int height = img.Height;
+
+                    if (width > MaxDimension || height > MaxDimension)
+                    {
+                        double scale = Math.Min((double)MaxDimension / width, (double)MaxDimension / height);
+                        int newW = Math.Max(1, (int)(width * scale));
+                        int newH = Math.Max(1, (int)(height * scale));
+
+                        var resized = new Bitmap(newW, newH);
+                        using (var g = Graphics.FromImage(resized))
+                        {
+                            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                            g.DrawImage(img, 0, 0, newW, newH);
+                        }
+
+                        picFoto.Image = resized;
+                    }
+                    else
+                    {
+                        picFoto.Image = new Bitmap(img);
+                    }
+                }
+                catch (OutOfMemoryException)
+                {
+                    MessageBox.Show("Arquivo não é uma imagem válida ou imagem muito grande.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Erro ao carregar a imagem: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 

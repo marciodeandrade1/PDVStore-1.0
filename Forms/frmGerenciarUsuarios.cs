@@ -1,10 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using PDVStore.Data;
+﻿using PDVStore.Data;
 using PDVStore.Models;
 using Serilog;
 using System;
+using System.Drawing;
+using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PDVStore.Forms
@@ -13,7 +13,6 @@ namespace PDVStore.Forms
     {
         private readonly PDVContext _context;
         private readonly IServiceProvider _serviceProvider;
-        private readonly EventHandler TxtBusca_TextChanged;
 
         public frmGerenciarUsuarios(PDVContext context, IServiceProvider serviceProvider)
         {
@@ -23,150 +22,119 @@ namespace PDVStore.Forms
 
             ConfigurarGrid();
             CarregarUsuarios();
-        }
 
-        private void CarregarUsuarios()
-        {
-            // Fetch only database fields (no methods or file I/O) so EF Core can translate the query
-            var usuariosDto = _context.UsuarioCaixa
-                .Select(u => new { u.Id, u.Nome, u.Ativo, u.FotoPath })
-                .ToList();
-
-            // Perform file I/O and image creation on the client side
-            var usuarios = usuariosDto.Select(u => new
-            {
-                u.Id,
-                u.Nome,
-                Status = u.Ativo ? "Ativo" : "Inativo",
-                Foto = !string.IsNullOrEmpty(u.FotoPath) && File.Exists(u.FotoPath)
-                       ? LoadImageSafely(u.FotoPath)
-                       : Properties.Resources.user_default
-            })
-            .ToList();
-
-            dgvUsuarios.DataSource = usuarios;
-        }
-
-        // Helper to load an Image without locking the file by cloning the image into memory
-        private Image LoadImageSafely(string path)
-        {
-            try
-            {
-                using var fs = File.OpenRead(path);
-                using var temp = Image.FromStream(fs);
-                return new Bitmap(temp);
-            }
-            catch
-            {
-                // If loading fails, fall back to default resource
-                return Properties.Resources.user_default;
-            }
+            txtBusca.TextChanged += TxtBusca_TextChanged;
         }
 
         private void ConfigurarGrid()
         {
             dgvUsuarios.AutoGenerateColumns = false;
+            dgvUsuarios.RowTemplate.Height = 60; // Aumenta altura da linha para melhor visualização da foto
 
-            dgvUsuarios.Columns.Add("Id", "ID");
-            dgvUsuarios.Columns.Add("Nome", "Nome de Usuário");
-            dgvUsuarios.Columns.Add("Permissao", "Permissão");
-            dgvUsuarios.Columns.Add("Status", "Status");
+            // Colunas
+            dgvUsuarios.Columns.Add(new DataGridViewTextBoxColumn { Name = "Id", HeaderText = "ID", DataPropertyName = "Id", Width = 60 });
+            dgvUsuarios.Columns.Add(new DataGridViewTextBoxColumn { Name = "Nome", HeaderText = "Nome de Usuário", DataPropertyName = "Nome", Width = 180 });
+            dgvUsuarios.Columns.Add(new DataGridViewTextBoxColumn { Name = "Permissao", HeaderText = "Permissão", DataPropertyName = "Permissao", Width = 130 });
+            dgvUsuarios.Columns.Add(new DataGridViewTextBoxColumn { Name = "Status", HeaderText = "Status", DataPropertyName = "Status", Width = 90 });
 
+            // === COLUNA FOTO (Image Column) ===
             var fotoColumn = new DataGridViewImageColumn
             {
                 Name = "Foto",
                 HeaderText = "Foto",
-                Width = 70,
-                ImageLayout = DataGridViewImageCellLayout.Zoom
+                Width = 80,
+                ImageLayout = DataGridViewImageCellLayout.Zoom,   // Mantém proporção
+                DefaultCellStyle = { NullValue = Properties.Resources.user_default }
             };
             dgvUsuarios.Columns.Add(fotoColumn);
         }
 
         private void CarregarUsuarios(string filtro = "")
         {
-            var query = _context.UsuarioCaixa.Where(u => u.Ativo);
+            var query = _context.Usuarios.Where(u => u.Ativo);
 
             if (!string.IsNullOrWhiteSpace(filtro))
-            {
                 query = query.Where(u => u.Nome.Contains(filtro));
-            }
 
-            var usuarios = query.Select(u => new
-            {
-                u.Id,
-                u.Nome,
-                Permissao = u.Permissao == TipoPermissao.Administrador ? "Administrador" : "Operador",
-                Status = u.Ativo ? "Ativo" : "Inativo",
-                Foto = !string.IsNullOrEmpty(u.FotoPath) && File.Exists(u.FotoPath)
-                       ? Image.FromFile(u.FotoPath)
-                       : Properties.Resources.user_default
-            }).ToList();
+            var usuarios = query
+                .Select(u => new { u.Id, u.Nome, u.Permissao, u.Ativo, u.FotoPath })
+                .AsEnumerable() // materializa a consulta antes de realizar I/O de arquivos
+                .Select(u => new
+                {
+                    u.Id,
+                    u.Nome,
+                    Permissao = u.Permissao == TipoPermissao.Administrador ? "Administrador" : "Operador",
+                    Status = u.Ativo ? "Ativo" : "Inativo",
+                    Foto = ObterImagemUsuario(u.FotoPath)   // carregamento seguro em memória
+                })
+                .ToList();
 
             dgvUsuarios.DataSource = usuarios;
         }
 
+        // Método seguro e otimizado para carregar imagem
+        private Image ObterImagemUsuario(string? fotoPath)
+        {
+            if (string.IsNullOrEmpty(fotoPath) || !File.Exists(fotoPath))
+                return Properties.Resources.user_default;
+
+            try
+            {
+                using var fs = new FileStream(fotoPath, FileMode.Open, FileAccess.Read);
+                using var tempImage = Image.FromStream(fs);
+                return new Bitmap(tempImage); // Cópia em memória para evitar lock
+            }
+            catch
+            {
+                return Properties.Resources.user_default;
+            }
+        }
+
+        private void TxtBusca_TextChanged(object? sender, EventArgs e)
+        {
+            CarregarUsuarios(txtBusca.Text.Trim());
+        }
+
+        // ====================== BOTÕES ======================
         private void btnNovo_Click(object sender, EventArgs e)
         {
-            var frmCadastro = new frmCadastroUsuario(_context);
-            frmCadastro.ShowDialog();
-            CarregarUsuarios();
+            var frm = new frmCadastroUsuario(_context);
+            frm.ShowDialog();
+            CarregarUsuarios(txtBusca.Text.Trim());
         }
 
         private void btnEditar_Click(object sender, EventArgs e)
         {
-            if (dgvUsuarios.CurrentRow == null)
-            {
-                MessageBox.Show("Selecione um usuário para editar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            if (dgvUsuarios.CurrentRow == null) return;
 
-            int idUsuario = Convert.ToInt32(dgvUsuarios.CurrentRow.Cells["Id"].Value);
-
-            var usuario = _context.UsuarioCaixa.Find(idUsuario);
+            int id = Convert.ToInt32(dgvUsuarios.CurrentRow.Cells["Id"].Value);
+            var usuario = _context.Usuarios.Find(id);
 
             if (usuario != null)
             {
-                var frmEdicao = new frmCadastroUsuario(_context, usuario);
-                frmEdicao.ShowDialog();
-                CarregarUsuarios();
-
-                // Configurar evento de filtro em tempo real
-                txtBusca.TextChanged += TxtBusca_TextChanged;
+                var frm = new frmCadastroUsuario(_context, usuario);
+                frm.ShowDialog();
+                CarregarUsuarios(txtBusca.Text.Trim());
             }
         }
 
-        private async void btnExcluir_ClickAsync(object sender, EventArgs e)
+        private async void btnExcluir_Click(object sender, EventArgs e)
         {
-            if (dgvUsuarios.CurrentRow == null)
-            {
-                MessageBox.Show("Selecione um usuário para excluir.", "Aviso");
-                return;
-            }
+            if (dgvUsuarios.CurrentRow == null) return;
 
-            if (MessageBox.Show("Deseja realmente desativar este usuário?\n\nEsta ação não pode ser desfeita facilmente.",
-                "Confirmar Exclusão", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
+            if (MessageBox.Show("Deseja desativar este usuário?", "Confirmação",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
                 return;
 
-            try
+            int id = Convert.ToInt32(dgvUsuarios.CurrentRow.Cells["Id"].Value);
+            var usuario = await _context.Usuarios.FindAsync(id);
+
+            if (usuario != null)
             {
-                int idUsuario = Convert.ToInt32(dgvUsuarios.CurrentRow.Cells["Id"].Value);
-                var usuario = await _context.UsuarioCaixa.FindAsync(idUsuario);
-
-                if (usuario != null)
-                {
-                    usuario.SetAtivo(false); // Soft Delete
-                    await _context.SaveChangesAsync();
-
-                    Log.Information("Usuário desativado: {Nome} (ID: {Id})", usuario.Nome, usuario.Id);
-
-                    MessageBox.Show("Usuário desativado com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    CarregarUsuarios();
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Erro ao desativar usuário");
-                MessageBox.Show("Erro ao desativar usuário.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                usuario.SetAtivo(false);
+                await _context.SaveChangesAsync();
+                Log.Information("Usuário desativado: {Nome}", usuario.Nome);
+                CarregarUsuarios(txtBusca.Text.Trim());
             }
         }
 
@@ -175,12 +143,29 @@ namespace PDVStore.Forms
             CarregarUsuarios(txtBusca.Text.Trim());
         }
 
-        private void dgvUsuarios_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void dgvUsuarios_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
-            {
                 btnEditar.PerformClick();
-            }
+        }
+
+        // Event handler required by Designer. If not used, keep empty to satisfy wiring.
+        private void dgvUsuarios_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // No-op
+        }
+
+        // Designer wiring expects this handler. Forward to the existing implementation.
+        private void btnExcluir_ClickAsync(object sender, EventArgs e)
+        {
+            // Forward to existing async handler
+            btnExcluir_Click(sender, e);
+        }
+
+        // Designer wiring expects this handler for search button.
+        private void btnBuscarUsuario_Click(object sender, EventArgs e)
+        {
+            CarregarUsuarios(txtBusca.Text.Trim());
         }
     }
 }

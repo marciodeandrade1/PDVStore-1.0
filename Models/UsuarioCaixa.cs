@@ -2,37 +2,33 @@
 {
     public class UsuarioCaixa : IHasId
     {
-        internal string? FotoPath;
-        internal bool Ativo;
-
         public int Id { get; set; }
         public string Nome { get; set; }
        // public string Email { get; set; }
         public string SenhaHash { get; set; }
         public DateTime CreatedAt { get; set; }
-
-        private string? fotoPath;
-
+        // Mapped properties - expose as public properties so EF Core can translate queries
+        public string? FotoPath { get; set; }
+        public bool Ativo { get; set; } = true;
+        // Backwards-compatible accessors for existing code that used Get/Set methods
         public string? GetFotoPath()
         {
-            return fotoPath;
+            return FotoPath;
         }
 
         public void SetFotoPath(string? value)
         {
-            fotoPath = value;
+            FotoPath = value;
         }
-
-        private bool ativo = true;
 
         public bool GetAtivo()
         {
-            return ativo;
+            return Ativo;
         }
 
         public void SetAtivo(bool value)
         {
-            ativo = value;
+            Ativo = value;
         }
 
         // === NOVO: Sistema de Permissões ===

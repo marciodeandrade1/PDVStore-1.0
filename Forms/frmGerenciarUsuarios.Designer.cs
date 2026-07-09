@@ -35,6 +35,7 @@
             btnAtualizar = new Button();
             lblPesquisar = new Label();
             txtBusca = new TextBox();
+            btnBuscarUsuario = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvUsuarios).BeginInit();
             SuspendLayout();
             // 
@@ -101,14 +102,25 @@
             // 
             txtBusca.Location = new Point(95, 15);
             txtBusca.Name = "txtBusca";
-            txtBusca.Size = new Size(353, 27);
+            txtBusca.Size = new Size(560, 27);
             txtBusca.TabIndex = 6;
+            // 
+            // btnBuscarUsuario
+            // 
+            btnBuscarUsuario.Location = new Point(691, 15);
+            btnBuscarUsuario.Name = "btnBuscarUsuario";
+            btnBuscarUsuario.Size = new Size(125, 29);
+            btnBuscarUsuario.TabIndex = 7;
+            btnBuscarUsuario.Text = "Buscar";
+            btnBuscarUsuario.UseVisualStyleBackColor = true;
+            btnBuscarUsuario.Click += btnBuscarUsuario_Click;
             // 
             // frmGerenciarUsuarios
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(887, 428);
+            Controls.Add(btnBuscarUsuario);
             Controls.Add(txtBusca);
             Controls.Add(lblPesquisar);
             Controls.Add(btnAtualizar);
@@ -132,5 +144,6 @@
         private Button btnAtualizar;
         private Label lblPesquisar;
         private TextBox txtBusca;
+        private Button btnBuscarUsuario;
     }
 }

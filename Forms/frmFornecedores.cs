@@ -272,6 +272,7 @@ namespace PDVStore.Forms
             ClientSize = new Size(284, 261);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
+            MinimizeBox = false;
             Name = "frmFornecedores";
             ResumeLayout(false);
 

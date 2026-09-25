@@ -40,10 +40,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "frmMenuPrincipal";
+            SuspendLayout();
+            // 
+            // frmMenuPrincipal
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(800, 450);
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "frmMenuPrincipal";
+            Text = "frmMenuPrincipal";
+            ResumeLayout(false);
         }
 
         #endregion

@@ -303,6 +303,11 @@ namespace PDVStore.Forms
             if (cmbProduto.Items.Count > 0) cmbProduto.SelectedIndex = 0;
         }
 
+        private void InitializeComponent()
+        {
+
+        }
+
         // O que faz: cancela a compra selecionada, estornando (devolvendo) o estoque.
         // Por que existe: compras registradas por engano precisam ser desfeitas; o estoque
         //   deve voltar ao que era antes — daí o aviso de "estoque será estornado".

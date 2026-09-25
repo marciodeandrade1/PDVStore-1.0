@@ -469,6 +469,11 @@ namespace PDVStore.Forms
             AtualizarTroco();
         }
 
+        private void InitializeComponent()
+        {
+
+        }
+
         // Calcula o troco com base no valor recebido e no total da venda.
         // O QUE FAZ: subtrai o total do _viewModel do valor digitado em txtValorRecebido,
         // guarda em _troco e mostra no rótulo (ou "Valor insuficiente").

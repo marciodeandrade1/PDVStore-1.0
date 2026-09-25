@@ -117,6 +117,8 @@
             Controls.Add(btnLogin);
             Controls.Add(btnSair);
             Margin = new Padding(3, 2, 3, 2);
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "frmLogin";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "PDV Store - Login";

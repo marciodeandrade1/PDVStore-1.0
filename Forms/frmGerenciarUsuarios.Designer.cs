@@ -152,6 +152,7 @@
             Margin = new Padding(3, 2, 3, 2);
             MaximizeBox = false;
             MaximumSize = new Size(792, 414);
+            MinimizeBox = false;
             MinimumSize = new Size(792, 414);
             Name = "frmGerenciarUsuarios";
             Text = "frmGerenciarUsuarios";

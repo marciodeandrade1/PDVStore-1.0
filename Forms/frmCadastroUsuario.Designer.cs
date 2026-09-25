@@ -194,6 +194,8 @@
             Controls.Add(label1);
             Controls.Add(txtNome);
             Margin = new Padding(3, 2, 3, 2);
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "frmCadastroUsuario";
             Text = "frmCadastroUsuario";
             ((System.ComponentModel.ISupportInitialize)picFoto).EndInit();

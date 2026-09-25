@@ -97,6 +97,20 @@ namespace PDVStore.Forms
             Controls.AddRange(new Control[] { lblTitulo, lblSub, lblVersao, pgbProgresso, lblStatus });
         }
 
+        private void InitializeComponent()
+        {
+            SuspendLayout();
+            // 
+            // frmSplash
+            // 
+            ClientSize = new Size(284, 261);
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "frmSplash";
+            ResumeLayout(false);
+
+        }
+
         // Executa as verificações de ambiente e decide se o login pode abrir.
         // O QUE FAZ: define um callback que atualiza barra/status a cada passo, chama
         // VerificacaoSistemaService.VerificarAsync, trata falhas (mensagem e UltimaFalha)

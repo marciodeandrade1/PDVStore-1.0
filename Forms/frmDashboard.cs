@@ -255,6 +255,11 @@ namespace PDVStore.Forms
             }
         }
 
+        private void InitializeComponent()
+        {
+
+        }
+
         // EVENTO - botão "Exportar Excel"
         // O que faz: gera relatórios em planilha Excel (itens vendidos + estoque mínimo).
         // Por que existe: a planilha permite ao gestor filtrar/analisar os dados com

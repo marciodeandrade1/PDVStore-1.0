@@ -381,6 +381,11 @@ namespace PDVStore.Forms
             await CarregarAsync();
         }
 
+        private void InitializeComponent()
+        {
+
+        }
+
         // O que faz: limpa todos os campos e zera _clienteSelecionado (modo novo).
         // Por que existe: prepara a tela para um novo cadastro após salvar/desativar ou
         //   quando o usuário clica em "Novo"; também apaga os "originais" de validação.

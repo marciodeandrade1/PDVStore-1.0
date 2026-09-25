@@ -195,6 +195,15 @@ namespace PDVStore.Forms
 
         private void InitializeComponent()
         {
+            SuspendLayout();
+            // 
+            // frmCaixa
+            // 
+            ClientSize = new Size(284, 261);
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "frmCaixa";
+            ResumeLayout(false);
 
         }
 

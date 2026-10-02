@@ -1,3 +1,4 @@
+using PDVStore.Helpers;
 using PDVStore.Models;
 using PDVStore.Services;
 using System;
@@ -28,6 +29,7 @@ namespace PDVStore.Forms
         {
             _caixaService = caixaService ?? throw new ArgumentNullException(nameof(caixaService));
             BuildUI();
+            Tema.Aplicar(this);
             Load += async (_, _) => await AtualizarAsync();
         }
 
@@ -40,9 +42,9 @@ namespace PDVStore.Forms
         {
             Text = "Abertura / Fechamento de Caixa";
             StartPosition = FormStartPosition.CenterScreen;
-            ClientSize = new Size(820, 560);
-            MaximumSize = new Size(820, 560);
-            MinimumSize = new Size(820, 560);
+            ClientSize = new Size(830, 585);
+            MaximumSize = new Size(830, 585);
+            MinimumSize = new Size(830, 585);
             MaximizeBox = false;
             Font = new Font("Segoe UI", 10F);
             BackColor = Color.White;

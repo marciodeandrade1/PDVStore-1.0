@@ -63,7 +63,7 @@ namespace PDVStore.Forms
 
 
             dgvProdutos = new DataGridView { Location = new Point(500, 20), Size = new Size(660, 460), Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right, ReadOnly = true, AllowUserToAddRows = false, AutoGenerateColumns = false };
-            btnRefresh = new Button { Text = "Refresh", Location = new Point(1045, 492), Size = new Size(75, 28) };
+            btnRefresh = new Button { Text = "Refresh", Location = new Point(1045, 488), Size = new Size(75, 28) };
 
             int y = 16;
             int dy = 47;
@@ -211,6 +211,31 @@ namespace PDVStore.Forms
                 MessageBox.Show("Informe um preço de venda válido.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+            if (!decimal.TryParse(txtPrecoCusto.Text, out decimal precoCusto) || precoCusto < 0)
+            {
+                MessageBox.Show("Informe um preço de custo válido.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (!int.TryParse(txtEstoque.Text, out int estoque) || estoque < 0)
+            {
+                MessageBox.Show("Informe um estoque válido.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (!int.TryParse(txtEstoqueMinimo.Text, out int estoqueMinimo) || estoqueMinimo < 0)
+            {
+                MessageBox.Show("Informe um estoque mínimo válido.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(txtCategoria.Text))
+            {
+                MessageBox.Show("Categoria é obrigatória.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(txtDescricao.Text))
+            {
+                MessageBox.Show("Descrição é obrigatória.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
             try
             {
@@ -219,9 +244,9 @@ namespace PDVStore.Forms
                 produto.CodigoBarras = txtCodigo.Text.Trim();
                 produto.Nome = txtNomeProduto.Text.Trim();
                 produto.Preco = preco;
-                produto.PrecoCusto = decimal.TryParse(txtPrecoCusto.Text, out decimal custo) ? Math.Max(0, custo) : 0;
-                produto.Estoque = int.TryParse(txtEstoque.Text, out int estoque) ? Math.Max(0, estoque) : 0;
-                produto.EstoqueMinimo = int.TryParse(txtEstoqueMinimo.Text, out int minimo) ? Math.Max(0, minimo) : 0;
+                produto.PrecoCusto = Math.Max(0, precoCusto);
+                produto.Estoque = Math.Max(0, estoque);
+                produto.EstoqueMinimo = Math.Max(0, estoqueMinimo);
                 produto.Categoria = txtCategoria.Text.Trim();
                 produto.Descricao = txtDescricao.Text.Trim();
 

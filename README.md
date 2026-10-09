@@ -6,7 +6,7 @@
 
 *Curso Técnico em Informática — 2026 | SENAC Ji-Paraná*
 
-Sistema de Ponto de Venda (PDV) para pequenas lojas e comércios de bairro. Desenvolvido em **C# / .NET 8** com **WinForms**, **Entity Framework Core** e banco **SQL Server LocalDB**.
+Sistema de Ponto de Venda (PDV) para pequenas lojas e comércios de bairro. Desenvolvido em **C# / .NET 8** com **WindowsForms**, **Entity Framework Core** e banco **SQL Server LocalDB**.
 
 ## Funcionalidades
 
